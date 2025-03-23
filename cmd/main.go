@@ -4,10 +4,16 @@ import (
 	"log"
 
 	"github.com/gabin-ishimwe/complex-crud-go/cmd/api"
+	"github.com/gabin-ishimwe/complex-crud-go/db"
 )
 
 func main() {
-	server := api.NewAPIServer(":8080", nil)
+	db, err := db.NewPostgresStorage()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	server := api.NewAPIServer(":8080", db)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
