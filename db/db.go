@@ -10,7 +10,7 @@ import (
 )
 
 func NewPostgresStorage() (*sql.DB, error) {
-	dataSourceName := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Envs.PgHost, 5000, config.Envs.PgUser, config.Envs.PgPassword, config.Envs.PgDbName)
+	dataSourceName := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Envs.PgHost, 5432, config.Envs.PgUser, config.Envs.PgPassword, config.Envs.PgDbName)
 	db, error := sql.Open(config.Envs.PgDriverName, dataSourceName)
 	if error != nil {
 		log.Fatal("Error connecting to the database: ", error)
@@ -18,8 +18,8 @@ func NewPostgresStorage() (*sql.DB, error) {
 	defer db.Close()
 
 	// Check if database connection was successful
-	if error := db.Ping(); error != nil {
-		log.Fatal(error)
+	if err := db.Ping(); err != nil {
+		log.Fatal(err)
 	}
 	fmt.Println("Successfully connected to PostgreSQL!")
 	return db, nil
