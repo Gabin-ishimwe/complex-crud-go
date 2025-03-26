@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gabin-ishimwe/complex-crud-go/service/auth"
 	"github.com/gabin-ishimwe/complex-crud-go/types"
 	"github.com/gabin-ishimwe/complex-crud-go/utils"
 	"github.com/gorilla/mux"
@@ -39,6 +40,13 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("User with email %s already exists", payload.Email))
 		return
 	}
+	// Hash password
+	hashedPassword, err := auth.HashPassword(payload.Password)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	// if doesn't creater the new user
 	err = h.store.CreateUser(types.User{
 		FirstName: payload.FirstName,
