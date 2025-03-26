@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gabin-ishimwe/complex-crud-go/types"
@@ -9,10 +10,11 @@ import (
 )
 
 type Handler struct {
+	store types.UserStore
 }
 
-func NewHandler() *Handler {
-	return &Handler{} // memory address to Handler
+func NewHandler(store types.UserStore) *Handler {
+	return &Handler{store: store} // memory address to Handler
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
@@ -31,4 +33,23 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		// return error
 		utils.WriteError(w, http.StatusBadRequest, err)
 	}
+	// Check if user exists
+	_, err := h.store.GetUserByEmail(payload.Email)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("User with email %s already exists", payload.Email))
+		return
+	}
+	// if doesn't creater the new user
+	err = h.store.CreateUser(types.User{
+		FirstName: payload.FirstName,
+		LastName:  payload.LastName,
+		Email:     payload.Email,
+		Password:  payload.Password,
+	})
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, err)
+		return
+	}
+	utils.WriteJson(w, http.StatusCreated, nil)
+
 }

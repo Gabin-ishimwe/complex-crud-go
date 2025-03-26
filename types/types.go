@@ -17,3 +17,9 @@ type User struct {
 	Password  string    `json:"-"`
 	CreatedAt time.Time `json:"createdAt"`
 }
+
+type UserStore interface {
+	GetUserByEmail(email string) (*User, error)
+	GetUserById(int) (*User, error)
+	CreateUser(User) error
+}
