@@ -48,6 +48,7 @@ func (s *Store) GetUserByEmail(email string) (*types.User, error) {
 		}
 	}
 
+	// TODO: Learn well this check!
 	if u.ID == 0 {
 		return nil, fmt.Errorf("user not found")
 	}

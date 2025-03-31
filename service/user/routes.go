@@ -24,7 +24,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
-
+	// Handle Login
 }
 
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +52,7 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		FirstName: payload.FirstName,
 		LastName:  payload.LastName,
 		Email:     payload.Email,
-		Password:  payload.Password,
+		Password:  hashedPassword,
 	})
 	if err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)

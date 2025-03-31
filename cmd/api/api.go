@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gabin-ishimwe/complex-crud-go/service/blog"
 	"github.com/gabin-ishimwe/complex-crud-go/service/user"
 	"github.com/gorilla/mux"
 )
@@ -29,6 +30,10 @@ func (s *APIServer) Run() error {
 	// dependy injection
 	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(mainRouter)
+
+	blogStore := blog.NewBlogRepository(s.db)
+	blogHandler := blog.NewBlogHandler(blogStore)
+	blogHandler.RegisterBlogHandler(mainRouter)
 
 	log.Println("Listening on ", s.addr)
 
