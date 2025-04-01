@@ -8,11 +8,13 @@ import (
 )
 
 func main() {
+	// Connect to Postgres
 	db, err := db.NewPostgresStorage()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Start Server
 	server := api.NewAPIServer(":8080", db)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
