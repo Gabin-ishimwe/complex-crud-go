@@ -14,6 +14,8 @@ import (
 func main() {
 	db, err := db.NewPostgresStorage()
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	log.Fatal(driver)
+	log.Fatal(err)
 	if err != nil {
 		log.Fatal(err)
 	}
